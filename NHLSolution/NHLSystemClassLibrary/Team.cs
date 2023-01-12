@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NHLSystemClassLibrary
 {
-    internal class Team
+    public class Team
     {
         Conference _conference;
         Division _division;
@@ -48,7 +48,7 @@ namespace NHLSystemClassLibrary
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException(nameof(Name), "name Cannot Be Blank");
+                    throw new ArgumentNullException(nameof(Name), "Name Cannot Be Blank");
                 }
                 _name = value.Trim();
             }
