@@ -14,29 +14,6 @@ namespace NHLSystemClassLibrary
         string _city;
         string _arena;
 
-        public Conference Conference
-        {
-            get
-            {
-                return _conference;
-            }
-            private set
-            {
-                _conference = value;
-            }
-        }
-
-        public Division Division
-        {
-            get
-            {
-                return _division;
-            }
-            set
-            {
-                _division = value;
-            }
-        }
 
         public string Name
         {
@@ -54,9 +31,15 @@ namespace NHLSystemClassLibrary
             }
         }
 
-        public Team(string Name)
+        public Conference Conference { get; set; }
+        public Division Division { get; set; }
+
+
+        public Team(string Name, Conference conference, Division division)
         {
             this.Name = Name;
+            Conference = conference;
+            Division = division;
         }
     }
 }
