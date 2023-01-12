@@ -7,7 +7,7 @@ string TeamName = Console.ReadLine();
 try
 {
     //create a new team instance
-    Team currentTeam = new Team(TeamName);
+    Team currentTeam = new Team(TeamName, Conference.Western, Division.Pacific);
     // Print the Team name
     Console.WriteLine($"Team Name: {currentTeam.Name}");
 }
