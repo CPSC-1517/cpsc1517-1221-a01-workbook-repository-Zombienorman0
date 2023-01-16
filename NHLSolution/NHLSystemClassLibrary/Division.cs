@@ -8,9 +8,9 @@ namespace NHLSystemClassLibrary
 {
     public enum Division
     {
+        Metropolitan,
         Atlantic,
         Central,
-        Mertopolitan,
         Pacific
     }
 }
