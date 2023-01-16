@@ -44,7 +44,7 @@ namespace NHLSystemClassLibrary
             public Division Division { get; set; }
 
 
-            public Team(string Name, Conference conference, Division division)
+            public TeamS(string Name, Conference conference, Division division)
             {
                 this.Name = Name;
                 Conference = conference;
