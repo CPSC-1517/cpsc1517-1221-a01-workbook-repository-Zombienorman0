@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace NHLSystemClassLibrary
 {
+    public enum Division
     {
+        Metropolitan,
+        Atlantic,
+        Central,
+        Pacific
     }
 }
