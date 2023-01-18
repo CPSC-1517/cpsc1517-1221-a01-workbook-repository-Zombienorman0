@@ -7,49 +7,115 @@ using System.Threading.Tasks;
 namespace NHLSystemClassLibrary
 {
 
-    internal class Team
+        public class Team
     {
-        string name;
-        string City;
-        string Arena;
-        Conference conference;
-        Division division;
+        string _name;
+        string _city;
+        string _arena;
+        List<Player> Players;
 
-        public class TeamS
+        public Conference Conference { get; set; }
+
+        public Division Division { get; set; }
+
+        public string Name
         {
-            Conference _conference;
-            Division _division;
-            string _name;
-            string _city;
-            string _arena;
-
-
-            public string Name
+            get
             {
-                get
-                {
-                    return _name;
-                }
-                set
-                {
-                    if (string.IsNullOrWhiteSpace(value))
-                    {
-                        throw new ArgumentNullException(nameof(Name), "Name Cannot Be Blank");
-                    }
-                    _name = value.Trim();
-                }
+                return _name;
             }
-
-            public Conference Conference { get; set; }
-            public Division Division { get; set; }
-
-
-            public TeamS(string Name, Conference conference, Division division)
+            set
             {
-                this.Name = Name;
-                Conference = conference;
-                Division = division;
+                if ((value.All(char.IsLetter) || value.Any(char.IsWhiteSpace)) && !string.IsNullOrWhiteSpace(value))
+                {
+                    _name = value;
+                }
+                else if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException("Name cannot be blank");
+                }
+                else
+                {
+                    throw new Exception("Name must contain only letters and spaces");
+                }
             }
         }
+
+        public string City
+        {
+            get
+            {
+                return _city;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException("City can not be blank");
+                }
+                else
+                {
+                    if (value.Length >= 3)
+                    {
+                        _city = value;
+                    }
+                    else
+                    {
+                        throw new Exception("City must be longer than 2 characters");
+                    }
+                }
+            }
+        }
+
+        public string Arena
+        {
+            get
+            {
+                return _arena;
+            }
+            set
+            {
+                if(string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(value), "Value cannot be null.");
+                }
+                else
+                {
+                    _arena = value.Trim();
+                }
+            }
+        }
+
+
+        //CONSTRUCTORS
+
+        public Team(Conference conference, Division division, string name, string city, string arena)
+        {
+            Conference = conference;
+            Division = division;
+            Name = name;
+            City = city;
+            Arena = arena;
+        }
+
+        public Team(string name)
+        {
+            Name = name;
+        }
+
+        //METHODS
+
+        public void AddPlayer(int playerNo, string name, Position position, int gamesPlayed, int goals, int assists)
+        {
+            foreach(Player p in Players)
+            {
+                if(name == p.Name)
+                {
+                    throw new ArgumentException(nameof(name), "Player is already on team");
+                }
+            }
+            Players.Add(new Player(playerNo, name, position, gamesPlayed, goals, assists));
+        }
+
     }
 }

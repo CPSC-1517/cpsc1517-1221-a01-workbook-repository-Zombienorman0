@@ -2,42 +2,104 @@ using NHLSystemClassLibrary;
 namespace NHLSystemTest
    
 {
-    [TestClass]
+     [TestClass]
     public class TeamTest
     {
         [TestMethod]
-        [DataRow("Oilers", Conference.Western, Division.Pacific)]
-        [DataRow("Flames", Conference.Western, Division.Pacific)]
-        [DataRow("Canucks", Conference.Western, Division.Pacific)]
-        [DataRow("Maple Leafs", Conference.Eastern, Division.Atlantic)]
-        [DataRow("Senators", Conference.Eastern, Division.Atlantic)]
-        [DataRow("Canadiéns", Conference.Western, Division.Atlantic)]
-        [DataRow("Winipeg", Conference.Western, Division.Central)]
-
-        public void Name_ValidName_NameSet(string teamName, Conference conference, Division division)
+        [DataRow("Oilers")]
+        [DataRow("Flames")]
+        [DataRow("Canucks")]
+        [DataRow("Maple Leafs")]
+        [DataRow("Senators")]
+        [DataRow("Canadiens")]
+        public void Name_ValidName_NameSet(string teamName)
         {
-            //arrange
-            //act
-            Team currentTeam = new Team(teamName, conference,division);
-            //assert
+            //Arange
+            //Act
+            Team currentTeam = new Team(teamName);
+            //Assert
             Assert.AreEqual(teamName, currentTeam.Name);
-            Assert.AreEqual(conference, currentTeam.Conference);
-            Assert.AreEqual(division, currentTeam.Division);
         }
+
         [TestMethod]
-        [DataRow("", "Name Cannot Be Blank", Conference.Western, Division.Pacific)]
-        [DataRow("      ", "Name Cannot Be Blank", Conference.Western, Division.Pacific)]
-        public void Name_InvalidName_ThrowsArgumentNullException(String teamname, string exceptedErrorMessage, Conference conference, Division division)
+        [DataRow(null, "Value cannot be null.")]
+        [DataRow("", "Value cannot be null.")]
+        [DataRow(" ", "Value cannot be null.")]
+        [DataRow("Oilers1", "Name must contain only letters and spaces")]
+
+        public void Name_InvalidName_ThrowsArgumentNulLException(string teamName, string expectedResult)
         {
-            //arrange an act
             try
             {
-                Team currentTeam = new Team(teamname, conference, division);
-                Assert.Fail("An argumentNullException should have been thrown");
+                Team testTeam = new Team(teamName);
+                Assert.Fail("Should have thrown ArgumentNullExeption");
             }
-            catch(ArgumentNullException ex)
+            catch(Exception ex)
             {
-                StringAssert.Contains(ex.Message, exceptedErrorMessage);
+                StringAssert.Contains(ex.Message, expectedResult); 
+            }
+        }
+
+        [TestMethod]
+        [DataRow ("Edmonton")]
+        [DataRow("Calgary")]
+        [DataRow("Vancouver")]
+        [DataRow("Toronto")]
+        [DataRow("Ottowa")]
+        [DataRow("Montreal")]
+        public void City_ValidCity_SetCity(string city)
+        {
+            Team testTeam = new Team(Conference.Eastern, Division.Atlantic, "Test Name", city, "Test Arena");
+            Assert.AreEqual(testTeam.City, city);
+        }
+
+        [TestMethod]
+        [DataRow(null, "Value cannot be null.")]
+        [DataRow("", "Value cannot be null.")]
+        [DataRow(" ", "Value cannot be null.")]
+        [DataRow("LA", "City must be longer than 2 characters")]
+        public void City_InvalidCity_ThrowsExeption(string city, string expectedResult)
+        {
+            try
+            {
+                Team testTeam = new Team(Conference.Eastern, Division.Atlantic, "Test Name", city, "Test Arena");
+                Assert.Fail("Does not throw exception");
+            }
+            catch(Exception ex)
+            {
+                StringAssert.Contains(ex.Message, expectedResult);
+            }
+            
+        }
+
+        [TestMethod]
+        [DataRow("Rogers Place")]
+        [DataRow("Saddle Dome")]
+        [DataRow("Rogers Arena")]
+        [DataRow("Scotiabank Arena")]
+        [DataRow("Canadian Tire Centre")]
+        [DataRow("Centre Bell")]
+        public void Arena_ValidArena_SetArena(string arena)
+        {
+            Team testTeam = new Team(Conference.Eastern, Division.Atlantic, "Test Name", "Test City", arena);
+            Assert.AreEqual(testTeam.Arena, arena);
+        }
+
+        [TestMethod]
+        [DataRow(null, "Value cannot be null.")]
+        [DataRow("", "Value cannot be null.")]
+        [DataRow(" ", "Value cannot be null.")]
+
+        public void Arena_InvalidArena_ThrowsException(string arena, string expectedResult)
+        {
+            try
+            {
+                Team testTeam = new Team(Conference.Eastern, Division.Atlantic, "Test Name", "Test City", arena);
+                Assert.Fail("Does not throw Exeption");
+            }
+            catch (Exception ex)
+            {
+                StringAssert.Contains(ex.Message, expectedResult);
             }
         }
     }
