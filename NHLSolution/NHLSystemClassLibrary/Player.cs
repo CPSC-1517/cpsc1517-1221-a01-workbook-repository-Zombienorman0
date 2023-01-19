@@ -12,29 +12,15 @@ namespace NHLSystemClassLibrary
     public class Player
     {
         private int _playerNo, _gamesPlayed, _goals, _assists;
-        private string _name, _playerName;
-        const int MinPlayerNo = 1;
-        const int MaxPlayerNo = 98;
-
-        
-        
+        private string _name;
         public Position Position { get; set; }
 
-        public int PlayerNo
-        {
-            get => _playerNo;
-            private set
-            {
-                if (value < MinPlayerNo || value > MaxPlayerNo)
-                {
-                    throw new ArgumentException($"PlayerNo must be between {MinPlayerNo} and {MaxPlayerNo}");
-                }
-                _playerNo = value;
-            }
-        }
         public string Name
         {
-            get => _playerName;
+            get
+            {
+                return _name;
+            }
             set
             {
                 if ((value.All(char.IsLetter) || value.Any(char.IsWhiteSpace)) && !string.IsNullOrWhiteSpace(value))
@@ -43,51 +29,68 @@ namespace NHLSystemClassLibrary
                 }
                 else if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException("Name cannot be blank");
+                    throw new ArgumentNullException(nameof(value), "Name cannot be blank");
                 }
                 else
                 {
                     throw new Exception("Name must contain only letters and spaces");
                 }
-                _playerName = value;
             }
         }
 
-        //public Position Position { get; private set; }
-
-      
-
-        
+        public int PlayerNo
+        {
+            get { return _playerNo; }
+            set
+            {
+                if (value <= 0 || value > 98)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), "Player number must be 1-98");
+                }
+                else
+                {
+                    _playerNo = value;
+                }
+            }
+        }
 
         public int GamesPlayed
         {
-            get => _gamesPlayed; 
+            get { return _gamesPlayed; }
             set
             {
-                if (!Utilities.IsPositiveOrZero(value))
+                if (value < 0)
                 {
-                    throw new ArgumentException(nameof(value),"Games played cannot be less than 0");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Games played cannot be less than 0");
+                }
+                else
+                {
+                    _gamesPlayed = value;
                 }
             }
         }
         public int Goals
         {
-            get => _goals; 
+            get { return _goals; }
             set
             {
-                if (!Utilities.IsPositiveOrZero(value))
+                if (value < 0)
                 {
-                    throw new ArgumentException(nameof(value), "Goals cannot be less than 0");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Goals cannot be less than 0");
+                }
+                else
+                {
+                    _goals = value;
                 }
             }
         }
 
         public int Assists
         {
-            get => _assists; 
+            get { return _assists; }
             set
             {
-                if (!Utilities.IsPositiveOrZero(value))
+                if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), "Assists cannot be less than 0");
                 }
@@ -98,8 +101,10 @@ namespace NHLSystemClassLibrary
             }
         }
 
-        public int Points => Goals + Assists;
-      
+        public int Points
+        {
+            get { return Goals + Assists; }
+        }
 
         public Player(int playerNo, string name, Position position, int gamesPlayed, int goals, int assists)
         {
@@ -111,20 +116,20 @@ namespace NHLSystemClassLibrary
             Assists = assists;
         }
 
-        public void AddGamesPlayed()
-        {
-            GamesPlayed += 1;
-        }
         //METHODS
         public void AddGoal()
         {
-            _goals += 1;
+            _goals++;
         }
 
         public void AddAssist()
         {
-            _assists += 1;
+            _assists++;
         }
 
+        public void AddGamesPlayed()
+        {
+            _gamesPlayed++;
+        }
     }
 }

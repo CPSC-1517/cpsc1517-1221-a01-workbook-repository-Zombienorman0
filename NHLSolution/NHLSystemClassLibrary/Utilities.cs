@@ -12,5 +12,9 @@ namespace NHLSystemClassLibrary
         {
             return value >= 0;
         }
+        static public bool IsPositiveOrZero(double value)
+        {
+            return (value >= 0);
+        }
     }
 }
