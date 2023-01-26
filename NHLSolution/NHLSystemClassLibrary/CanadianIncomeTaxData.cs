@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace NHLSystemClassLibrary
+{
+    public struct CanadianIncomeTaxData
+    {
+        public string RegionAbbreviation { get; set; }
+        public string RegionName { get; set; }
+        public int taxYear { get; set; }
+        public decimal StartingIncome { get; set; }
+        public decimal EndingIncome { get; set; }
+        public double taxRate { get;set; }
+        public decimal baseTaxAmount { get;set; }
+
+    }
+}

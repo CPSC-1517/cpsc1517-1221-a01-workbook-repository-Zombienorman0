@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace NHLSystemClassLibrary
 {
+    /*
     public class Goalie : Player
     {
         private int _playerNo, _gamesPlayed, _goals, _assists;
@@ -119,5 +120,5 @@ namespace NHLSystemClassLibrary
         {
             _assists += 1;
         }
-    }
+    }*/
 }
