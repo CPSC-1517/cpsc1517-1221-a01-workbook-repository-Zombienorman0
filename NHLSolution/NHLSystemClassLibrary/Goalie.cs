@@ -7,118 +7,37 @@ using System.Xml.Linq;
 
 namespace NHLSystemClassLibrary
 {
-    /*
     public class Goalie : Player
     {
-        private int _playerNo, _gamesPlayed, _goals, _assists;
-        private string _name, _playerName;
-        const int MinPlayerNo = 1;
-        const int MaxPlayerNo = 98;
-
-        public Goalie(int playerNo, string name, Position position, int gamesPlayed, int goals, int assists)
+        private double _saveValuePercentage;
+        public double GoalsAgainstAverage { get; set; }
+        //public double SavePercentage { get; set; }
+        public double SavePercentage
         {
-            PlayerNo = playerNo;
-            Name = name;
-            Position = position;
-            GamesPlayed = gamesPlayed;
-            Goals = goals;
-            Assists = assists;
-        }
-
-        public Position Position { get; set; }
-
-        public int PlayerNo
-        {
-            get => _playerNo;
-            private set
-            {
-                if (value < MinPlayerNo || value > MaxPlayerNo)
-                {
-                    throw new ArgumentException($"PlayerNo must be between {MinPlayerNo} and {MaxPlayerNo}");
-                }
-                _playerNo = value;
-            }
-        }
-        public string Name
-        {
-            get => _playerName;
+            get => _saveValuePercentage;
             set
             {
-                if ((value.All(char.IsLetter) || value.Any(char.IsWhiteSpace)) && !string.IsNullOrWhiteSpace(value))
+                if (value < 0 || value > 1)
                 {
-                    _name = value;
+                    throw new ArgumentException("SavePercentage must be between 0 and 1");
                 }
-                else if (string.IsNullOrWhiteSpace(value))
-                {
-                    throw new ArgumentNullException("Name cannot be blank");
-                }
-                else
-                {
-                    throw new Exception("Name must contain only letters and spaces");
-                }
-                _playerName = value;
+                _saveValuePercentage = value;
             }
         }
-
-        //public Position Position { get; private set; }
-
+        public int Shutouts { get; private set; }
 
 
-
-
-        public int GamesPlayed
+        public Goalie(int playerNo, string name) : base(playerNo, name, Position.G)
         {
-            get => _gamesPlayed;
-            set
-            {
-                if (!Utilities.IsPositiveOrZero(value))
-                {
-                    throw new ArgumentException(nameof(value), "Games played cannot be less than 0");
-                }
-            }
-        }
-        public int Goals
-        {
-            get => _goals;
-            set
-            {
-                if (!Utilities.IsPositiveOrZero(value))
-                {
-                    throw new ArgumentException(nameof(value), "Goals cannot be less than 0");
-                }
-            }
-        }
 
-        public int Assists
-        {
-            get => _assists;
-            set
-            {
-                if (!Utilities.IsPositiveOrZero(value))
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), "Assists cannot be less than 0");
-                }
-                else
-                {
-                    _assists = value;
-                }
-            }
         }
-
-        public int Points => Goals + Assists;
-        public void AddGamesPlayed()
+        public Goalie(int playerNo, string name, int gamesPlayed) : base(playerNo, name, Position.G)
         {
-            GamesPlayed += 1;
+            base.GamesPlayed = gamesPlayed;
         }
-        //METHODS
-        public void AddGoal()
+        public void AddShutout()
         {
-            _goals += 1;
+            Shutouts += 1;
         }
-
-        public void AddAssist()
-        {
-            _assists += 1;
-        }
-    }*/
+    }
 }

@@ -2,21 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace NHLSystemClassLibrary
 {
 
-        public class Team
+    public class Team
     {
-        string _name;
-        string _city;
-        string _arena;
-        List<Player> Players;
-
-        public Conference Conference { get; set; }
-
-        public Division Division { get; set; }
+        // Define fully implemented properties with a backing field for: Name, City, Arena
+        private string _name;
+        private string _city;
+        private string _arena;
 
         public string Name
         {
@@ -26,18 +24,19 @@ namespace NHLSystemClassLibrary
             }
             set
             {
-                if ((value.All(char.IsLetter) || value.Any(char.IsWhiteSpace)) && !string.IsNullOrWhiteSpace(value))
+                // Validate new value is not blank and contains only letters a-z
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    _name = value;
+                    throw new ArgumentNullException(nameof(Name), "Name cannot be blank.");
                 }
-                else if (string.IsNullOrWhiteSpace(value))
+                // Validate new value contains only letters a-z
+                string lettersOnlyPattern = @"^[a-zA-Z ]{1,}$";
+                if (!Regex.IsMatch(value, lettersOnlyPattern))
                 {
-                    throw new ArgumentNullException("Name cannot be blank");
+                    throw new ArgumentException("Name cannot only contain letters.");
                 }
-                else
-                {
-                    throw new Exception("Name must contain only letters and spaces");
-                }
+
+                _name = value.Trim();   // remove leading "   hello" and trailing "hello    " white spaces
             }
         }
 
@@ -49,21 +48,17 @@ namespace NHLSystemClassLibrary
             }
             set
             {
+                // Verify that new value is not blank
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException("City can not be blank");
+                    throw new ArgumentNullException(nameof(City), "City cannot be blank.");
                 }
-                else
+                // Verify that new value contains 3 or more characters
+                if (value.Trim().Length < 3)
                 {
-                    if (value.Length >= 3)
-                    {
-                        _city = value;
-                    }
-                    else
-                    {
-                        throw new Exception("City must be longer than 2 characters");
-                    }
+                    throw new ArgumentException("City must contain 3 or more characters");
                 }
+                _city = value.Trim();
             }
         }
 
@@ -75,47 +70,62 @@ namespace NHLSystemClassLibrary
             }
             set
             {
-                if(string.IsNullOrWhiteSpace(value))
+                // Validate that new value is not blank
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentNullException(nameof(value), "Value cannot be null.");
+                    throw new ArgumentNullException(nameof(Arena), "Arena value cannot be blank.");
                 }
-                else
+                _arena = value.Trim();
+            }
+        }
+        // Define auto-implemented properties for: Conference, Division
+        public Conference Conference { get; set; }
+        public Division Division { get; set; }
+
+        // TODO: Define auto-implemented property for players: List<Player> with a private set
+        //[JsonInclude]
+        public List<Player> Players { get; private set; }
+
+        // TODO: Add method to add a new Player
+        // 1) Validate newPlayer is not null
+        // 2) Validate newPlayer PlayerNo is not already on the players list
+        // 3) Validate players list is not already full (max 23 players per team)
+        public void AddPlayer(Player newPlayer)
+        {
+            if (newPlayer == null)
+            {
+                throw new ArgumentNullException(nameof(AddPlayer), "Player cannot be null");
+            }
+            foreach (var existingPlayer in Players)
+            {
+                if (newPlayer.PlayerNo == existingPlayer.PlayerNo)
                 {
-                    _arena = value.Trim();
+                    throw new ArgumentException($"PlayerNo {newPlayer.PlayerNo} is already in the team");
                 }
             }
+            if (Players.Count == 23)
+            {
+                throw new ArgumentException("Team is full. Cannot add anymore players.");
+            }
+            Players.Add(newPlayer);
         }
 
 
-        //CONSTRUCTORS
-
-        public Team(Conference conference, Division division, string name, string city, string arena)
+        // Greedy constructor
+        [JsonConstructor]
+        public Team(string Name, string city, string arena, Conference conference, Division division)
         {
-            Conference = conference;
-            Division = division;
-            Name = name;
+            this.Name = Name;
             City = city;
             Arena = arena;
+            Conference = conference;
+            Division = division;
+            Players = new List<Player>();
         }
 
-        public Team(string name)
+        public override string ToString()
         {
-            Name = name;
+            return $"Name: {Name}, City: {City}, Arena: {Arena}, Conference: {Conference}, Division: {Division}";
         }
-
-        //METHODS
-
-        public void AddPlayer(int playerNo, string name, Position position, int gamesPlayed, int goals, int assists)
-        {
-            foreach(Player p in Players)
-            {
-                if(name == p.Name)
-                {
-                    throw new ArgumentException(nameof(name), "Player is already on team");
-                }
-            }
-            Players.Add(new Player(playerNo, name, position, gamesPlayed, goals, assists));
-        }
-
     }
 }

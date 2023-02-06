@@ -10,11 +10,11 @@ namespace NHLSystemClassLibrary
     {
         public string RegionAbbreviation { get; set; }
         public string RegionName { get; set; }
-        public int taxYear { get; set; }
+        public int TaxYear { get; set; }
         public decimal StartingIncome { get; set; }
         public decimal EndingIncome { get; set; }
-        public double taxRate { get;set; }
-        public decimal baseTaxAmount { get;set; }
+        public double TaxRate { get; set; }
+        public decimal BaseTaxAmount { get; set; }
 
     }
 }
